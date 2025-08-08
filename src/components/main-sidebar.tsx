@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarFooter,
 } from '@/components/ui/sidebar';
-import { BrainCircuit, BotMessageSquare, BarChart, Settings, LifeBuoy, ClipboardCheck, FileText, GraduationCap, Book } from 'lucide-react';
+import { BrainCircuit, BotMessageSquare, BarChart, Settings, LifeBuoy, ClipboardCheck, FileText, GraduationCap, Book, User as UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -29,6 +29,14 @@ export function MainSidebar() {
             <Link href="/">
               <BarChart />
               <span>Dashboard</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+         <SidebarMenuItem>
+          <SidebarMenuButton asChild tooltip="Profile" isActive={pathname === '/profile'}>
+            <Link href="/profile">
+              <UserIcon />
+              <span>Profile</span>
             </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>

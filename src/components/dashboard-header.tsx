@@ -10,9 +10,7 @@ import {
 import { exams } from '@/lib/constants';
 import type { Exam } from '@/lib/types';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { Button } from '@/components/ui/button';
-import { Bell } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { UserNav } from '@/components/user-nav';
 
 interface DashboardHeaderProps {
   selectedExam: Exam;
@@ -41,14 +39,7 @@ export function DashboardHeader({ selectedExam, onExamChange }: DashboardHeaderP
             </SelectContent>
           </Select>
         </div>
-        <Button variant="ghost" size="icon" className="rounded-full">
-          <Bell className="h-5 w-5" />
-          <span className="sr-only">Toggle notifications</span>
-        </Button>
-        <Avatar>
-          <AvatarImage src="https://placehold.co/40x40.png" alt="User avatar" data-ai-hint="student avatar" />
-          <AvatarFallback>U</AvatarFallback>
-        </Avatar>
+        <UserNav />
       </div>
     </header>
   );

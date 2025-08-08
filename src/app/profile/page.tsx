@@ -1,16 +1,18 @@
+'use client';
+
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import { MainSidebar } from '@/components/main-sidebar';
-import { MockTest } from '@/components/mock-test';
+import { UserProfile } from '@/components/user-profile';
 import { PageHeader } from '@/components/page-header';
 
-export default function MockTestsPage() {
+export default function ProfilePage() {
   return (
     <SidebarProvider>
       <MainSidebar />
       <SidebarInset>
-        <PageHeader title="Mock Tests" />
+        <PageHeader title="Profile" />
         <main className="flex flex-1 flex-col p-4 md:p-6">
-            <MockTest />
+            <UserProfile />
         </main>
       </SidebarInset>
     </SidebarProvider>
