@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useRef, useEffect, FormEvent } from 'react';
-import { SendHorizonal, Mic, Square, Bot } from 'lucide-react';
+import { SendHorizonal, Mic, Square, Bot, User } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -191,9 +191,8 @@ export function AiTrainerChat() {
                             <p className="whitespace-pre-wrap">{message.content}</p>
                         </div>
                         {message.role === 'user' && (
-                             <Avatar className="w-8 h-8 border">
-                               <AvatarImage src="https://placehold.co/40x40.png" alt="User avatar" data-ai-hint="student avatar"/>
-                               <AvatarFallback>U</AvatarFallback>
+                             <Avatar className="w-8 h-8 border flex items-center justify-center">
+                               <User className="w-5 h-5" />
                             </Avatar>
                         )}
                     </div>
