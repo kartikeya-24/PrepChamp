@@ -22,25 +22,25 @@ interface PaperListProps {
 
 const dummyPapers = {
     jee: [
-        { year: 2023, name: 'JEE Main 2023 Paper 1', url: '#' },
-        { year: 2023, name: 'JEE Advanced 2023 Paper 1', url: '#' },
-        { year: 2022, name: 'JEE Main 2022 Paper 2', url: '#' },
+        { year: 2023, name: 'JEE Main 2023 Paper 1', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
+        { year: 2023, name: 'JEE Advanced 2023 Paper 1', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
+        { year: 2022, name: 'JEE Main 2022 Paper 2', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
     ],
     neet: [
-        { year: 2023, name: 'NEET 2023 Question Paper', url: '#' },
-        { year: 2022, name: 'NEET 2022 Question Paper', url: '#' },
+        { year: 2023, name: 'NEET 2023 Question Paper', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
+        { year: 2022, name: 'NEET 2022 Question Paper', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
     ],
     upsc: [
-        { year: 2023, name: 'UPSC Prelims 2023 GS Paper 1', url: '#' },
-        { year: 2022, name: 'UPSC Prelims 2022 GS Paper 1', url: '#' },
+        { year: 2023, name: 'UPSC Prelims 2023 GS Paper 1', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
+        { year: 2022, name: 'UPSC Prelims 2022 GS Paper 1', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
     ],
     cat: [
-        { year: 2023, name: 'CAT 2023 Slot 1', url: '#' },
-        { year: 2022, name: 'CAT 2022 Slot 2', url: '#' },
+        { year: 2023, name: 'CAT 2023 Slot 1', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
+        { year: 2022, name: 'CAT 2022 Slot 2', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
     ],
     gate: [
-        { year: 2024, name: 'GATE 2024 CS Paper', url: '#' },
-        { year: 2024, name: 'GATE 2024 ME Paper', url: '#' },
+        { year: 2024, name: 'GATE 2024 CS Paper', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
+        { year: 2024, name: 'GATE 2024 ME Paper', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
     ]
 }
 

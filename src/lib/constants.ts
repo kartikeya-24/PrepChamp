@@ -14,7 +14,7 @@ export const resources: Resource[] = [
     title: 'Study Materials',
     description: 'Access curated notes and guides.',
     icon: Book,
-    href: '#',
+    href: '/study-materials',
   },
   {
     title: 'Sample Papers',
