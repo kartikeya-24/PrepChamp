@@ -97,17 +97,25 @@ export function AiTrainerChat() {
         reader.readAsDataURL(audioBlob);
         reader.onloadend = async () => {
             const base64Audio = reader.result as string;
-            const response = await convertSpeechToText({ audioDataUri: base64Audio });
-            setIsTranscribing(false);
-            if (response.success && response.data.text) {
-                // Set the input but do not send the message
-                setInput(response.data.text);
-            } else {
+            try {
+                const response = await convertSpeechToText({ audioDataUri: base64Audio });
+                if (response.success && response.data.text) {
+                    setInput(response.data.text);
+                } else {
+                     toast({
+                        variant: "destructive",
+                        title: "Transcription Failed",
+                        description: response.error || "Could not understand audio. Please try again.",
+                    });
+                }
+            } catch (e) {
                 toast({
                     variant: "destructive",
-                    title: "Transcription Failed",
-                    description: response.error || "Could not understand audio. Please try again.",
+                    title: "Transcription Error",
+                    description: "An unexpected error occurred during transcription.",
                 });
+            } finally {
+                setIsTranscribing(false);
             }
         };
         
