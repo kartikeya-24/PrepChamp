@@ -20,7 +20,7 @@ export function MainSidebar() {
       <SidebarHeader>
         <div className="flex items-center gap-2">
           <BrainCircuit className="w-8 h-8 text-primary" />
-          <h1 className="text-xl font-bold font-headline">ExamPrep AI</h1>
+          <h1 className="text-xl font-bold font-headline">PrepChamp</h1>
         </div>
       </SidebarHeader>
       <SidebarMenu>

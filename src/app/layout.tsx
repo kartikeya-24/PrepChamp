@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'ExamPrep AI',
+  title: 'PrepChamp',
   description: 'Your personal AI-powered guide to ace competitive exams.',
 };
 
