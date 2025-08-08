@@ -6,7 +6,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { askAiTrainer } from '@/lib/actions';
+import { askAiTrainer, convertSpeechToText } from '@/lib/actions';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
@@ -29,6 +29,7 @@ export function AiTrainerChat() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [isTranscribing, setIsTranscribing] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
@@ -90,13 +91,25 @@ export function AiTrainerChat() {
         audioChunksRef.current.push(event.data);
       };
       mediaRecorderRef.current.onstop = async () => {
+        setIsTranscribing(true);
         const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-        // This is where you would send the audio to a speech-to-text API.
-        // For this prototype, we'll just show a message.
-        toast({
-          title: "Voice Input (Prototype)",
-          description: "In a real app, this audio would be converted to text.",
-        });
+        const reader = new FileReader();
+        reader.readAsDataURL(audioBlob);
+        reader.onloadend = async () => {
+            const base64Audio = reader.result as string;
+            const response = await convertSpeechToText({ audioDataUri: base64Audio });
+            if (response.success) {
+                setInput(response.data.text);
+            } else {
+                toast({
+                    variant: "destructive",
+                    title: "Transcription Failed",
+                    description: response.error,
+                });
+            }
+            setIsTranscribing(false);
+        };
+        
         audioChunksRef.current = [];
         stream.getTracks().forEach(track => track.stop());
       };
@@ -131,6 +144,12 @@ export function AiTrainerChat() {
         viewportRef.current.scrollTop = viewportRef.current.scrollHeight;
     }
   }, [messages]);
+
+  const getPlaceholderText = () => {
+    if (isRecording) return "Listening...";
+    if (isTranscribing) return "Transcribing...";
+    return "Type your question here...";
+  }
 
   return (
     <div className="flex flex-col h-[calc(100vh-4rem)]">
@@ -187,7 +206,7 @@ export function AiTrainerChat() {
                 <Textarea
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    placeholder={isRecording ? "Listening..." : "Type your question here..."}
+                    placeholder={getPlaceholderText()}
                     className="flex-1 resize-none"
                     rows={1}
                     onKeyDown={(e) => {
@@ -196,13 +215,13 @@ export function AiTrainerChat() {
                             handleFormSubmit(e);
                         }
                     }}
-                    disabled={isLoading || isRecording}
+                    disabled={isLoading || isRecording || isTranscribing}
                 />
-                <Button type="button" size="icon" onClick={handleMicClick} variant={isRecording ? 'destructive' : 'ghost'} disabled={isLoading}>
+                <Button type="button" size="icon" onClick={handleMicClick} variant={isRecording ? 'destructive' : 'ghost'} disabled={isLoading || isTranscribing}>
                     {isRecording ? <Square className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
                     <span className="sr-only">{isRecording ? "Stop recording" : "Start recording"}</span>
                 </Button>
-                <Button type="submit" size="icon" disabled={isLoading || !input.trim() || isRecording}>
+                <Button type="submit" size="icon" disabled={isLoading || !input.trim() || isRecording || isTranscribing}>
                     <SendHorizonal className="w-5 h-5" />
                     <span className="sr-only">Send</span>
                 </Button>

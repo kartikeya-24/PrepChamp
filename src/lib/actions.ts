@@ -4,6 +4,8 @@ import { answerStudentDoubts as answerStudentDoubtsFlow } from '@/ai/flows/answe
 import type { AnswerStudentDoubtsInput, AnswerStudentDoubtsOutput } from '@/ai/flows/answer-student-doubts';
 import { generateTopicQuestions as generateTopicQuestionsFlow, GenerateTopicQuestionsInput, GenerateTopicQuestionsOutput } from '@/ai/flows/generate-sample-questions';
 import { evaluateMockTest as evaluateMockTestFlow, EvaluateMockTestInput, EvaluateMockTestOutput } from '@/ai/flows/evaluate-mock-test';
+import { convertSpeechToText as speechToTextFlow, SpeechToTextInput, SpeechToTextOutput } from '@/ai/flows/speech-to-text';
+
 
 export async function askAiTrainer(input: AnswerStudentDoubtsInput): Promise<{success: true, answer: string, audioDataUri?: string} | {success: false, error: string}> {
     try {
@@ -33,5 +35,15 @@ export async function evaluateTest(input: EvaluateMockTestInput): Promise<{succe
     } catch (error) {
         console.error("Error in evaluate test flow:", error);
         return { success: false, error: "Sorry, I couldn't evaluate your test. Please try again." };
+    }
+}
+
+export async function convertSpeechToText(input: SpeechToTextInput): Promise<{success: true, data: SpeechToTextOutput} | {success: false, error: string}> {
+    try {
+        const result = await speechToTextFlow(input);
+        return { success: true, data: result };
+    } catch (error) {
+        console.error("Error in speech to text flow:", error);
+        return { success: false, error: "Sorry, I couldn't process your voice input. Please try again." };
     }
 }
