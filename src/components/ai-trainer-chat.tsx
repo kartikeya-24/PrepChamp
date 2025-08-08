@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useRef, useEffect, FormEvent } from 'react';
@@ -176,7 +177,7 @@ export function AiTrainerChat() {
                     >
                         {message.role === 'ai' && (
                             <Avatar className="w-8 h-8 border">
-                               <AvatarFallback>AI</AvatarFallback>
+                               <AvatarFallback>A</AvatarFallback>
                             </Avatar>
                         )}
                         <div
@@ -200,7 +201,7 @@ export function AiTrainerChat() {
                  {isLoading && (
                     <div className="flex items-start gap-4 justify-start">
                         <Avatar className="w-8 h-8 border">
-                            <AvatarFallback>AI</AvatarFallback>
+                            <AvatarFallback>A</AvatarFallback>
                         </Avatar>
                         <div className="max-w-md rounded-lg p-3 text-sm bg-card shadow-sm">
                            <Skeleton className="w-20 h-4" />
