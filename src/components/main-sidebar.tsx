@@ -85,16 +85,16 @@ export function MainSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Help">
-              <Link href="#">
+            <SidebarMenuButton asChild tooltip="Help" isActive={pathname === '/help'}>
+              <Link href="/help">
                 <LifeBuoy />
                 <span>Help</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Settings">
-              <Link href="#">
+            <SidebarMenuButton asChild tooltip="Settings" isActive={pathname === '/settings'}>
+              <Link href="/settings">
                 <Settings />
                 <span>Settings</span>
               </Link>

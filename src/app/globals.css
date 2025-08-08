@@ -40,6 +40,44 @@
     --sidebar-border: 215 27.9% 16.9%;
     --sidebar-ring: 262.1 83.3% 57.8%;
   }
+
+  .light {
+    --background: 0 0% 98%; /* Light Gray */
+    --foreground: 224 71.4% 4.1%; /* Deep Navy Blue */
+    --card: 0 0% 100%; /* White */
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: 217 89% 61%; /* Saturated Blue */
+    --primary-foreground: 210 20% 98%; /* Almost White */
+    --secondary: 0 0% 96.1%; /* Lighter Gray */
+    --secondary-foreground: 224 71.4% 4.1%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 42 100% 50%; /* Yellow-orange */
+    --accent-foreground: 224 71.4% 4.1%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 217 89% 61%;
+    --radius: 0.5rem;
+    --chart-1: 217 89% 61%;
+    --chart-2: 42 100% 50%;
+    --chart-3: 197 37% 34%;
+    --chart-4: 43 74% 76%;
+    --chart-5: 27 87% 77%;
+
+    /* Sidebar specific colors for light theme */
+    --sidebar-background: 0 0% 99%;
+    --sidebar-foreground: 224 71.4% 4.1%;
+    --sidebar-primary: 217 89% 61%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 0 0% 94%;
+    --sidebar-accent-foreground: 224 71.4% 4.1%;
+    --sidebar-border: 0 0% 92%;
+    --sidebar-ring: 217 89% 61%;
+  }
 }
 
 @layer base {
