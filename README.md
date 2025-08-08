@@ -1,4 +1,5 @@
-# Firebase Studio
+# PrepChamp
+
 
 This is a NextJS starter in Firebase Studio.
 
