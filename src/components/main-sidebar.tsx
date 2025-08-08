@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -25,8 +26,8 @@ export function MainSidebar() {
       </SidebarHeader>
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton asChild tooltip="Dashboard" isActive={pathname === '/'}>
-            <Link href="/">
+          <SidebarMenuButton asChild tooltip="Dashboard" isActive={pathname === '/dashboard'}>
+            <Link href="/dashboard">
               <BarChart />
               <span>Dashboard</span>
             </Link>
