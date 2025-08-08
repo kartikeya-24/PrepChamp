@@ -34,42 +34,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const isPublicRoute = publicRoutes.includes(pathname);
 
-    if (user && isPublicRoute) {
-      router.push('/');
-    } else if (!user && !isPublicRoute) {
+    if (!user && !isPublicRoute) {
       router.push('/login');
+    } else if (user && isPublicRoute) {
+      router.push('/');
     }
   }, [user, loading, pathname, router]);
-
-  if (loading) {
+  
+  const isPublicRoute = publicRoutes.includes(pathname);
+  if (loading || (!user && !isPublicRoute) || (user && isPublicRoute)) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-background">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     );
   }
-  
-  const isPublicRoute = publicRoutes.includes(pathname);
 
-  // If user is not logged in and trying to access a private route, show loader while redirecting
-  if (!user && !isPublicRoute) {
-     return (
-      <div className="flex h-screen w-full items-center justify-center bg-background">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
-      </div>
-    );
-  }
-  
-  // If user is logged in and trying to access a public route, show loader while redirecting
-  if (user && isPublicRoute) {
-       return (
-      <div className="flex h-screen w-full items-center justify-center bg-background">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  // Otherwise, show the page content
   return <AuthContext.Provider value={{ user, loading }}>{children}</AuthContext.Provider>;
 };
 
