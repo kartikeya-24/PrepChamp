@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -13,6 +13,7 @@ import { BrainCircuit, Loader2 } from 'lucide-react';
 import { signIn } from '@/lib/actions';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/auth-context';
 
 const formSchema = z.object({
   email: z.string().email('Invalid email address.'),
@@ -23,6 +24,14 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/');
+    }
+  }, [user, loading, router]);
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,7 +49,7 @@ export default function LoginPage() {
         title: 'Login Successful',
         description: "Welcome back!",
       });
-      // The AuthProvider will handle the redirect.
+      // The AuthProvider and useEffect will handle the redirect.
     } else {
       toast({
         variant: 'destructive',
@@ -49,6 +58,14 @@ export default function LoginPage() {
       });
     }
     setIsLoading(false);
+  }
+  
+  if (loading || user) {
+      return (
+          <div className="flex h-screen w-full items-center justify-center bg-background">
+              <Loader2 className="h-12 w-12 animate-spin text-primary" />
+          </div>
+      );
   }
 
   return (

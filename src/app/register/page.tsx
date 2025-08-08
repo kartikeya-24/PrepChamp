@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -12,6 +12,8 @@ import { useToast } from '@/hooks/use-toast';
 import { BrainCircuit, Loader2 } from 'lucide-react';
 import { signUp } from '@/lib/actions';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/auth-context';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -22,6 +24,15 @@ const formSchema = z.object({
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/');
+    }
+  }, [user, loading, router]);
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,9 +51,7 @@ export default function RegisterPage() {
         title: 'Registration Successful',
         description: "Your account has been created. Please log in.",
       });
-      // The AuthProvider will handle the redirect to the dashboard after login.
-      // For now, we can just let it sit here, or redirect to login.
-      // Since AuthProvider redirects to `/` on logged in state, we don't need to do anything.
+      router.push('/login');
     } else {
       toast({
         variant: 'destructive',
@@ -51,6 +60,14 @@ export default function RegisterPage() {
       });
     }
     setIsLoading(false);
+  }
+  
+    if (loading || user) {
+      return (
+          <div className="flex h-screen w-full items-center justify-center bg-background">
+              <Loader2 className="h-12 w-12 animate-spin text-primary" />
+          </div>
+      );
   }
 
   return (

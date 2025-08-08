@@ -2,6 +2,7 @@ import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from '@/context/auth-context';
+import { ProtectedLayout } from '@/components/protected-layout';
 
 export const metadata: Metadata = {
   title: 'ExamPrep AI',
@@ -22,7 +23,9 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <AuthProvider>
-          {children}
+            <ProtectedLayout>
+                {children}
+            </ProtectedLayout>
         </AuthProvider>
         <Toaster />
       </body>
