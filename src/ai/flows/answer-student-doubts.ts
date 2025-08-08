@@ -1,9 +1,7 @@
-// Implemented the Genkit flow for answering student doubts using a pre-defined prompt and Zod schemas.
-
 'use server';
 
 /**
- * @fileOverview A flow that answers student doubts and questions acting as a virtual trainer.
+ * @fileOverview A flow that answers student doubts and questions acting as a virtual trainer, with text-to-speech capability.
  *
  * - answerStudentDoubts - A function that handles answering student doubts.
  * - AnswerStudentDoubtsInput - The input type for the answerStudentDoubts function.
@@ -12,9 +10,10 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { textToSpeech } from './text-to-speech';
 
 const AnswerStudentDoubtsInputSchema = z.object({
-  question: z.string().describe('The student\u2019s question or doubt.'),
+  question: z.string().describe('The student’s question or doubt.'),
   context: z
     .string()
     .optional()
@@ -24,6 +23,7 @@ export type AnswerStudentDoubtsInput = z.infer<typeof AnswerStudentDoubtsInputSc
 
 const AnswerStudentDoubtsOutputSchema = z.object({
   answer: z.string().describe('The AI trainer’s answer to the student’s question.'),
+  audioDataUri: z.string().describe("A data URI of the AI's spoken answer. Expected format: 'data:audio/wav;base64,<encoded_data>'."),
 });
 export type AnswerStudentDoubtsOutput = z.infer<typeof AnswerStudentDoubtsOutputSchema>;
 
@@ -34,7 +34,9 @@ export async function answerStudentDoubts(input: AnswerStudentDoubtsInput): Prom
 const prompt = ai.definePrompt({
   name: 'answerStudentDoubtsPrompt',
   input: {schema: AnswerStudentDoubtsInputSchema},
-  output: {schema: AnswerStudentDoubtsOutputSchema},
+  output: {schema: z.object({
+    answer: z.string().describe('The AI trainer’s answer to the student’s question.'),
+  })},
   prompt: `You are an AI trainer for competitive exams. A student will ask you a question, and you should provide a clear and concise answer.
 
   Question: {{{question}}}
@@ -50,6 +52,14 @@ const answerStudentDoubtsFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return output!;
+    if (!output) {
+      throw new Error("Failed to get a response from the AI.");
+    }
+    const { media } = await textToSpeech(output.answer);
+
+    return {
+      answer: output.answer,
+      audioDataUri: media,
+    };
   }
 );

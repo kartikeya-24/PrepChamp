@@ -1,14 +1,14 @@
 'use server';
 
 import { answerStudentDoubts as answerStudentDoubtsFlow } from '@/ai/flows/answer-student-doubts';
-import type { AnswerStudentDoubtsInput } from '@/ai/flows/answer-student-doubts';
+import type { AnswerStudentDoubtsInput, AnswerStudentDoubtsOutput } from '@/ai/flows/answer-student-doubts';
 import { generateTopicQuestions as generateTopicQuestionsFlow, GenerateTopicQuestionsInput, GenerateTopicQuestionsOutput } from '@/ai/flows/generate-sample-questions';
 import { evaluateMockTest as evaluateMockTestFlow, EvaluateMockTestInput, EvaluateMockTestOutput } from '@/ai/flows/evaluate-mock-test';
 
-export async function askAiTrainer(input: AnswerStudentDoubtsInput) {
+export async function askAiTrainer(input: AnswerStudentDoubtsInput): Promise<{success: true, answer: string, audioDataUri?: string} | {success: false, error: string}> {
     try {
         const result = await answerStudentDoubtsFlow(input);
-        return { success: true, answer: result.answer };
+        return { success: true, answer: result.answer, audioDataUri: result.audioDataUri };
     } catch (error) {
         console.error("Error in AI trainer flow:", error);
         return { success: false, error: "Sorry, I couldn't process your question. Please try again." };
