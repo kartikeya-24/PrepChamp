@@ -22,7 +22,8 @@ import type { ChartConfig } from "@/components/ui/chart"
 
 const formSchema = z.object({
   examId: z.string().min(1, 'Please select an exam.'),
-  topic: z.string().min(1, 'Please select a topic.'),
+  subject: z.string().min(1, 'Please select a subject.'),
+  chapter: z.string().min(1, 'Please select a chapter.'),
   numQuestions: z.coerce.number().int().min(1, 'Number of questions must be at least 1.').max(10, 'Number of questions cannot exceed 10.'),
 });
 
@@ -50,21 +51,37 @@ export function MockTest() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       examId: exams[0].id,
-      topic: topics[exams[0].id][0],
+      subject: Object.keys(topics[exams[0].id])[0],
+      chapter: Object.values(topics[exams[0].id])[0][0],
       numQuestions: 5,
     },
   });
 
   const selectedExamId = form.watch('examId');
-
-  const topicOptions = useMemo(() => {
-    return topics[selectedExamId] || [];
+  const selectedSubject = form.watch('subject');
+  
+  const subjectOptions = useMemo(() => {
+    return Object.keys(topics[selectedExamId] || {});
   }, [selectedExamId]);
 
+  const chapterOptions = useMemo(() => {
+    if (selectedExamId && selectedSubject) {
+        return topics[selectedExamId]?.[selectedSubject] || [];
+    }
+    return [];
+  }, [selectedExamId, selectedSubject]);
+
   useEffect(() => {
-    // When the current question changes, reset the selected answer for the UI
-    setSelectedAnswer(userAnswers[currentQuestionIndex]?.toString());
-  }, [currentQuestionIndex, userAnswers]);
+    // When the current question changes, clear the selected answer for the UI
+    setSelectedAnswer(undefined);
+  }, [currentQuestionIndex]);
+  
+  useEffect(() => {
+    const defaultSubject = Object.keys(topics[selectedExamId])[0];
+    form.setValue('subject', defaultSubject);
+    const defaultChapter = topics[selectedExamId][defaultSubject][0];
+    form.setValue('chapter', defaultChapter);
+  }, [selectedExamId, form]);
 
   async function onStartTest(values: z.infer<typeof formSchema>) {
     setTestState('loading');
@@ -72,9 +89,11 @@ export function MockTest() {
     const exam = exams.find(e => e.id === values.examId);
     if (!exam) return;
 
+    const fullTopic = `${values.subject} - ${values.chapter}`;
+
     const response = await generateQuestions({
       examName: exam.name,
-      topic: values.topic,
+      topic: fullTopic,
       numQuestions: values.numQuestions,
     });
 
@@ -145,7 +164,8 @@ export function MockTest() {
     setSelectedAnswer(undefined);
     form.reset({
       examId: exams[0].id,
-      topic: topics[exams[0].id][0],
+      subject: Object.keys(topics[exams[0].id])[0],
+      chapter: Object.values(topics[exams[0].id])[0][0],
       numQuestions: 5,
     });
   };
@@ -166,7 +186,7 @@ export function MockTest() {
     return (
        <Card className="max-w-2xl mx-auto">
             <CardHeader>
-                <CardTitle>Mock Test: {form.getValues('topic')}</CardTitle>
+                <CardTitle>Mock Test: {form.getValues('subject')} - {form.getValues('chapter')}</CardTitle>
                 <CardDescription>
                     Question {currentQuestionIndex + 1} of {questions.length}
                 </CardDescription>
@@ -174,9 +194,9 @@ export function MockTest() {
             </CardHeader>
             <CardContent>
               <Form {...form}>
-                <form>
+                 <form>
                   <p className="font-semibold mb-4">{currentQuestion.questionText}</p>
-                  <RadioGroup onValueChange={handleAnswerChange} value={selectedAnswer}>
+                   <RadioGroup onValueChange={handleAnswerChange} value={selectedAnswer}>
                       {currentQuestion.options.map((option, index) => (
                           <FormItem key={index} className="flex items-center space-x-3 space-y-0">
                               <FormControl>
@@ -245,7 +265,7 @@ export function MockTest() {
     <Card className="max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle>Configure Your Mock Test</CardTitle>
-        <CardDescription>Choose an exam and topic to start your practice test.</CardDescription>
+        <CardDescription>Choose an exam, subject, and chapter to start your practice test.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -274,24 +294,53 @@ export function MockTest() {
                 </FormItem>
               )}
             />
-            <FormField
+             <FormField
               control={form.control}
-              name="topic"
+              name="subject"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Topic</FormLabel>
+                  <FormLabel>Subject</FormLabel>
                    <Select onValueChange={(value) => {
                        field.onChange(value);
-                   }} defaultValue={field.value} key={selectedExamId}>
+                       // Reset chapter when subject changes
+                       const firstChapter = topics[selectedExamId]?.[value]?.[0];
+                       if (firstChapter) {
+                           form.setValue('chapter', firstChapter);
+                       }
+                   }} value={field.value} key={`subject-${selectedExamId}`}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a topic" />
+                        <SelectValue placeholder="Select a subject" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {topicOptions.map((topic) => (
-                        <SelectItem key={topic} value={topic}>
-                          {topic}
+                      {subjectOptions.map((subject) => (
+                        <SelectItem key={subject} value={subject}>
+                          {subject}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="chapter"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Chapter</FormLabel>
+                   <Select onValueChange={field.onChange} value={field.value} key={`chapter-${selectedSubject}`}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a chapter" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {chapterOptions.map((chapter) => (
+                        <SelectItem key={chapter} value={chapter}>
+                          {chapter}
                         </SelectItem>
                       ))}
                     </SelectContent>
