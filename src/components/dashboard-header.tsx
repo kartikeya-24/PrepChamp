@@ -10,7 +10,6 @@ import {
 import { exams } from '@/lib/constants';
 import type { Exam } from '@/lib/types';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { UserNav } from '@/components/user-nav';
 
 interface DashboardHeaderProps {
   selectedExam: Exam;
@@ -39,7 +38,6 @@ export function DashboardHeader({ selectedExam, onExamChange }: DashboardHeaderP
             </SelectContent>
           </Select>
         </div>
-        <UserNav />
       </div>
     </header>
   );

@@ -6,11 +6,6 @@ import { generateTopicQuestions as generateTopicQuestionsFlow, GenerateTopicQues
 import { evaluateMockTest as evaluateMockTestFlow, EvaluateMockTestInput, EvaluateMockTestOutput } from '@/ai/flows/evaluate-mock-test';
 import { convertSpeechToText as speechToTextFlow, SpeechToTextInput, SpeechToTextOutput } from '@/ai/flows/speech-to-text';
 
-import { auth } from '@/lib/firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile as updateFirebaseProfile } from 'firebase/auth';
-import { z } from 'zod';
-
-
 export async function askAiTrainer(input: AnswerStudentDoubtsInput): Promise<{success: true, answer: string, audioDataUri?: string} | {success: false, error: string}> {
     try {
         const result = await answerStudentDoubtsFlow(input);
@@ -49,63 +44,5 @@ export async function convertSpeechToText(input: SpeechToTextInput): Promise<{su
     } catch (error) {
         console.error("Error in speech to text flow:", error);
         return { success: false, error: "Sorry, I couldn't process your voice input. Please try again." };
-    }
-}
-
-
-const SignUpSchema = z.object({
-    name: z.string(),
-    email: z.string().email(),
-    password: z.string(),
-});
-export async function signUp(values: z.infer<typeof SignUpSchema>): Promise<{ success: true; } | { success: false; error: string; }> {
-    try {
-        const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
-        await updateFirebaseProfile(userCredential.user, {
-            displayName: values.name,
-        });
-        return { success: true };
-    } catch (error: any) {
-        return { success: false, error: error.message };
-    }
-}
-
-const SignInSchema = z.object({
-    email: z.string().email(),
-    password: z.string(),
-});
-export async function signIn(values: z.infer<typeof SignInSchema>): Promise<{ success: true; } | { success: false; error: string; }> {
-    try {
-        await signInWithEmailAndPassword(auth, values.email, values.password);
-        return { success: true };
-    } catch (error: any) {
-        return { success: false, error: error.message };
-    }
-}
-
-export async function signOutUser() {
-    try {
-        await signOut(auth);
-        return { success: true };
-    } catch (error: any) {
-        return { success: false, error: error.message };
-    }
-}
-
-
-const UpdateProfileSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters.'),
-});
-export async function updateProfile(values: z.infer<typeof UpdateProfileSchema>): Promise<{ success: true; } | { success: false; error: string; }> {
-    try {
-        if (!auth.currentUser) {
-            throw new Error("You must be logged in to update your profile.");
-        }
-        await updateFirebaseProfile(auth.currentUser, {
-            displayName: values.name,
-        });
-        return { success: true };
-    } catch (error: any) {
-        return { success: false, error: error.message };
     }
 }
