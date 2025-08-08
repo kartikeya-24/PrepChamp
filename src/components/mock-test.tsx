@@ -161,17 +161,21 @@ export function MockTest() {
                  <Progress value={progress} className="mt-2" />
             </CardHeader>
             <CardContent>
-                <p className="font-semibold mb-4">{currentQuestion.questionText}</p>
-                <RadioGroup onValueChange={(value) => handleAnswerChange(parseInt(value))} value={userAnswers[currentQuestionIndex]?.toString()}>
-                    {currentQuestion.options.map((option, index) => (
-                        <FormItem key={index} className="flex items-center space-x-3 space-y-0">
-                            <FormControl>
-                                <RadioGroupItem value={index.toString()} />
-                            </FormControl>
-                            <FormLabel className="font-normal">{option}</FormLabel>
-                        </FormItem>
-                    ))}
-                </RadioGroup>
+              <Form {...form}>
+                <form>
+                  <p className="font-semibold mb-4">{currentQuestion.questionText}</p>
+                  <RadioGroup onValueChange={(value) => handleAnswerChange(parseInt(value))} value={userAnswers[currentQuestionIndex]?.toString()}>
+                      {currentQuestion.options.map((option, index) => (
+                          <FormItem key={index} className="flex items-center space-x-3 space-y-0">
+                              <FormControl>
+                                  <RadioGroupItem value={index.toString()} />
+                              </FormControl>
+                              <FormLabel className="font-normal">{option}</FormLabel>
+                          </FormItem>
+                      ))}
+                  </RadioGroup>
+                </form>
+              </Form>
                  {error && (
                     <Alert variant="destructive" className="mt-4">
                         <Terminal className="h-4 w-4" />
