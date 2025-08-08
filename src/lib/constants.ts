@@ -1,4 +1,4 @@
-import { Book, FileText, BotMessageSquare } from 'lucide-react';
+import { Book, FileText, BotMessageSquare, GraduationCap } from 'lucide-react';
 import type { Exam, Resource } from './types';
 
 export const exams: Exam[] = [
@@ -20,13 +20,13 @@ export const resources: Resource[] = [
     title: 'Sample Papers',
     description: 'Practice with model question papers.',
     icon: FileText,
-    href: '#',
+    href: '/sample-papers',
   },
   {
     title: 'Previous Year Questions',
     description: 'Analyze past trends with PYQs.',
-    icon: FileText,
-    href: '#',
+    icon: GraduationCap,
+    href: '/pyq',
   },
   {
     title: 'AI Trainer',

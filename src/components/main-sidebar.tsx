@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarFooter,
 } from '@/components/ui/sidebar';
-import { BrainCircuit, BotMessageSquare, BarChart, Settings, LifeBuoy, ClipboardCheck } from 'lucide-react';
+import { BrainCircuit, BotMessageSquare, BarChart, Settings, LifeBuoy, ClipboardCheck, FileText, GraduationCap } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -45,6 +45,22 @@ export function MainSidebar() {
             <Link href="/mock-tests">
               <ClipboardCheck />
               <span>Mock Tests</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild tooltip="Sample Papers" isActive={pathname === '/sample-papers'}>
+            <Link href="/sample-papers">
+              <FileText />
+              <span>Sample Papers</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild tooltip="Previous Year Questions" isActive={pathname === '/pyq'}>
+            <Link href="/pyq">
+              <GraduationCap />
+              <span>PYQs</span>
             </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
