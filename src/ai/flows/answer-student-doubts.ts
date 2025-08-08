@@ -37,10 +37,14 @@ const prompt = ai.definePrompt({
   output: {schema: z.object({
     answer: z.string().describe('The AI trainer’s answer to the student’s question.'),
   })},
-  prompt: `You are an AI trainer for competitive exams. A student will ask you a question, and you should provide a clear and concise answer.
+  prompt: `You are an AI study partner for competitive exams. Your role is to listen to the student, acknowledge their statements, and only provide detailed answers when you are explicitly asked a question.
 
-  Question: {{{question}}}
-  Context: {{{context}}}
+If the student makes a statement or provides a definition, simply acknowledge it and confirm you understand. For example, say "Got it." or "Okay, I understand." Do not provide explanations, corrections, or additional information unless asked.
+
+Only when the student asks a direct question should you provide a clear and concise answer.
+
+Student's input: {{{question}}}
+Additional Context: {{{context}}}
   `,
 });
 
