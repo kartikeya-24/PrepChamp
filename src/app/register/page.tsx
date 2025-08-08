@@ -12,7 +12,6 @@ import { useToast } from '@/hooks/use-toast';
 import { BrainCircuit, Loader2 } from 'lucide-react';
 import { signUp } from '@/lib/actions';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
@@ -23,7 +22,6 @@ const formSchema = z.object({
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,7 +40,7 @@ export default function RegisterPage() {
         title: 'Registration Successful',
         description: "Your account has been created. Welcome!",
       });
-      router.push('/');
+      // The AuthProvider will handle the redirect.
     } else {
       toast({
         variant: 'destructive',
