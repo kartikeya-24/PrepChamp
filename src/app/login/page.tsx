@@ -27,6 +27,7 @@ export default function LoginPage() {
   const { user, loading } = useAuth();
 
   useEffect(() => {
+    // If the user is authenticated, redirect them to the dashboard.
     if (!loading && user) {
       router.push('/');
     }
@@ -47,19 +48,23 @@ export default function LoginPage() {
     if (result.success) {
       toast({
         title: 'Login Successful',
-        description: "Welcome back!",
+        description: "Welcome back! Redirecting...",
       });
-      // The AuthProvider and useEffect will handle the redirect.
+      // The useEffect will handle the redirect once the user state is updated.
     } else {
       toast({
         variant: 'destructive',
         title: 'Login Failed',
         description: result.error,
       });
+      setIsLoading(false);
     }
-    setIsLoading(false);
+    // Don't set loading to false on success, to avoid a flicker of the form.
+    // The redirect will happen and this component will unmount.
   }
   
+  // While loading or if user is already logged in, show a spinner.
+  // This prevents the login form from flashing before the redirect.
   if (loading || user) {
       return (
           <div className="flex h-screen w-full items-center justify-center bg-background">
@@ -68,6 +73,7 @@ export default function LoginPage() {
       );
   }
 
+  // Only show the login form if not loading and no user is present
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
