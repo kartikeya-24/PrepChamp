@@ -5,6 +5,7 @@ import type { AnswerStudentDoubtsInput, AnswerStudentDoubtsOutput } from '@/ai/f
 import { generateTopicQuestions as generateTopicQuestionsFlow, GenerateTopicQuestionsInput, GenerateTopicQuestionsOutput } from '@/ai/flows/generate-sample-questions';
 import { evaluateMockTest as evaluateMockTestFlow, EvaluateMockTestInput, EvaluateMockTestOutput } from '@/ai/flows/evaluate-mock-test';
 import { convertSpeechToText as speechToTextFlow, SpeechToTextInput, SpeechToTextOutput } from '@/ai/flows/speech-to-text';
+import { solveImageQuestion as solveImageQuestionFlow, SolveImageQuestionInput, SolveImageQuestionOutput } from '@/ai/flows/solve-image-question';
 
 export async function askAiTrainer(input: AnswerStudentDoubtsInput): Promise<{success: true, answer: string, audioDataUri?: string} | {success: false, error: string}> {
     try {
@@ -44,5 +45,15 @@ export async function convertSpeechToText(input: SpeechToTextInput): Promise<{su
     } catch (error) {
         console.error("Error in speech to text flow:", error);
         return { success: false, error: "Sorry, I couldn't process your voice input. Please try again." };
+    }
+}
+
+export async function solveQuestionFromImage(input: SolveImageQuestionInput): Promise<{success: true, data: SolveImageQuestionOutput} | {success: false, error: string}> {
+    try {
+        const result = await solveImageQuestionFlow(input);
+        return { success: true, data: result };
+    } catch (error) {
+        console.error("Error in solve image question flow:", error);
+        return { success: false, error: "Sorry, I couldn't solve the problem from the image. Please try again." };
     }
 }

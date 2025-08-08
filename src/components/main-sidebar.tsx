@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarFooter,
 } from '@/components/ui/sidebar';
-import { BrainCircuit, BotMessageSquare, BarChart, Settings, LifeBuoy, ClipboardCheck, FileText, GraduationCap, Book } from 'lucide-react';
+import { BrainCircuit, BotMessageSquare, BarChart, Settings, LifeBuoy, ClipboardCheck, FileText, GraduationCap, Book, Camera } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -37,6 +37,14 @@ export function MainSidebar() {
             <Link href="/trainer">
               <BotMessageSquare />
               <span>AI Trainer</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild tooltip="Image Solver" isActive={pathname === '/image-solver'}>
+            <Link href="/image-solver">
+              <Camera />
+              <span>Image Solver</span>
             </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
