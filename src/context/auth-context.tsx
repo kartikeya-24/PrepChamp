@@ -31,30 +31,43 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    if (loading) return; // Don't do anything until authentication state is resolved
+    if (loading) return;
 
     const isPublicRoute = publicRoutes.includes(pathname);
 
     if (user && isPublicRoute) {
-      // If user is logged in and on a public route, redirect to dashboard
       router.push('/');
     } else if (!user && !isPublicRoute) {
-      // If user is not logged in and not on a public route, redirect to login
       router.push('/login');
     }
   }, [user, loading, pathname, router]);
 
-  // If we are still loading, or if we are in a state that requires a redirect, show a loader.
-  const isPublicRoute = publicRoutes.includes(pathname);
-  if (loading || (user && isPublicRoute) || (!user && !isPublicRoute)) {
-    return (
+
+  if (loading) {
+     return (
       <div className="flex h-screen w-full items-center justify-center bg-background">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     );
   }
 
-  // Otherwise, the user is in the correct location, so render the children.
+  const isPublicRoute = publicRoutes.includes(pathname);
+  if (!user && !isPublicRoute) {
+     return (
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    );
+  }
+  
+  if (user && isPublicRoute) {
+     return (
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   return <AuthContext.Provider value={{ user, loading }}>{children}</AuthContext.Provider>;
 };
 
