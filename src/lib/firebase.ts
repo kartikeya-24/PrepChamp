@@ -7,7 +7,7 @@ const firebaseConfig = {
   "projectId": "examprep-ai-a07qg",
   "appId": "1:229110796294:web:1dcdc5c8907ede01d2b387",
   "storageBucket": "examprep-ai-a07qg.firebasestorage.app",
-  "apiKey": "AIzaSyDdwXoJuUpVSvPTziyW67l78R7IT_XzRs8",
+  "apiKey": process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   "authDomain": "examprep-ai-a07qg.firebaseapp.com",
   "measurementId": "",
   "messagingSenderId": "229110796294"
