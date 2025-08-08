@@ -31,26 +31,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const isPublicRoute = publicRoutes.includes(pathname);
-  const isProtectedRoute = !isPublicRoute;
-
+  
   useEffect(() => {
     if (!loading) {
       if (user && isPublicRoute) {
         router.push('/');
-      } else if (!user && isProtectedRoute) {
+      } else if (!user && !isPublicRoute) {
         router.push('/login');
       }
     }
-  }, [user, loading, pathname, router, isPublicRoute, isProtectedRoute]);
+  }, [user, loading, isPublicRoute, router, pathname]);
 
-  // While loading, or if routing logic hasn't redirected yet, show loader
-  if (loading || (!user && isProtectedRoute) || (user && isPublicRoute)) {
+  if (loading || (!user && !isPublicRoute) || (user && isPublicRoute)) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-background">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     );
   }
+
 
   return <AuthContext.Provider value={{ user, loading }}>{children}</AuthContext.Provider>;
 };
