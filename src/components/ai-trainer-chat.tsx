@@ -100,9 +100,8 @@ export function AiTrainerChat() {
             const response = await convertSpeechToText({ audioDataUri: base64Audio });
             setIsTranscribing(false);
             if (response.success && response.data.text) {
-                // Set the input and immediately send the message
+                // Set the input but do not send the message
                 setInput(response.data.text);
-                handleSendMessage(response.data.text);
             } else {
                 toast({
                     variant: "destructive",
