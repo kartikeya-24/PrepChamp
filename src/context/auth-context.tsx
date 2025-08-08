@@ -30,20 +30,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => unsubscribe();
   }, []);
 
-  const isPublicRoute = publicRoutes.includes(pathname);
-  
   useEffect(() => {
-    if (!loading) {
-      if (user && isPublicRoute) {
-        router.push('/');
-      } else if (!user && !isPublicRoute) {
-        router.push('/login');
-      }
-    }
-  }, [user, loading, isPublicRoute, router, pathname]);
+    if (loading) return;
 
-  if (loading || (!user && !isPublicRoute) || (user && isPublicRoute)) {
+    const isPublic = publicRoutes.includes(pathname);
+
+    if (user && isPublic) {
+      router.push('/');
+    } else if (!user && !isPublic) {
+      router.push('/login');
+    }
+  }, [user, loading, pathname, router]);
+
+
+  if (loading) {
     return (
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    );
+  }
+  
+  const isPublic = publicRoutes.includes(pathname);
+  if ((!user && !isPublic) || (user && isPublic)) {
+     return (
       <div className="flex h-screen w-full items-center justify-center bg-background">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
