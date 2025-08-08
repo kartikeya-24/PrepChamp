@@ -21,8 +21,16 @@ const GenerateStudyRoadmapInputSchema = z.object({
 });
 export type GenerateStudyRoadmapInput = z.infer<typeof GenerateStudyRoadmapInputSchema>;
 
+const RoadmapStageSchema = z.object({
+    stage: z.number().describe("The stage number of the roadmap."),
+    name: z.string().describe("The name of the stage."),
+    description: z.string().describe("A short description of the stage."),
+    resources: z.array(z.string()).describe("A list of resources for this stage."),
+    milestones: z.array(z.string()).describe("A list of milestones for this stage."),
+});
+
 const GenerateStudyRoadmapOutputSchema = z.object({
-  studyRoadmap: z.string().describe('The AI-generated study roadmap for the specified exam as a JSON string.'),
+  roadmap: z.array(RoadmapStageSchema).describe("The AI-generated study roadmap for the specified exam."),
 });
 export type GenerateStudyRoadmapOutput = z.infer<typeof GenerateStudyRoadmapOutputSchema>;
 
@@ -41,11 +49,8 @@ const prompt = ai.definePrompt({
 Exam Name: {{{examName}}}
 Current Knowledge Level: {{{currentKnowledgeLevel}}}
 
-The output must be a JSON string with a single key "roadmap" which is an array of objects. Each object should have the following properties: "stage" (number), "name" (string), "description" (string), "resources" (array of strings), and "milestones" (array of strings).
-Example:
-{"roadmap": [{"stage": 1, "name": "...", "description": "...", "resources": ["...", "..."], "milestones": ["...", "..."]}]}
-
-Generate a 4-stage roadmap.`,
+Generate a 4-stage roadmap.
+`,
 });
 
 const generateStudyRoadmapFlow = ai.defineFlow(

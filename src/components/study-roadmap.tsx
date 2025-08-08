@@ -34,9 +34,7 @@ export function StudyRoadmap({ exam }: StudyRoadmapProps) {
           examName: exam.name,
           currentKnowledgeLevel: 'beginner',
         });
-        // Assuming the output is a JSON string.
-        const parsedRoadmap = JSON.parse(result.studyRoadmap);
-        setRoadmap(parsedRoadmap.roadmap);
+        setRoadmap(result.roadmap);
       } catch (e) {
         setError('Failed to generate study roadmap. Please try again.');
         console.error(e);
