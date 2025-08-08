@@ -35,7 +35,7 @@ export default function DashboardPage() {
               <ResourceHub />
             </div>
             <div className="md:col-span-2 lg:col-span-3">
-              <PerformanceAnalytics />
+              <PerformanceAnalytics exam={selectedExam} />
             </div>
           </div>
         </main>

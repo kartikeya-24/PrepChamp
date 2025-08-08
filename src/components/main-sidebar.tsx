@@ -6,10 +6,13 @@ import {
   SidebarMenuButton,
   SidebarFooter,
 } from '@/components/ui/sidebar';
-import { BrainCircuit, BotMessageSquare, BarChart, Settings, LifeBuoy } from 'lucide-react';
+import { BrainCircuit, BotMessageSquare, BarChart, Settings, LifeBuoy, ClipboardCheck } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
 
 export function MainSidebar() {
+  const pathname = usePathname();
   return (
     <Sidebar>
       <SidebarHeader>
@@ -20,7 +23,7 @@ export function MainSidebar() {
       </SidebarHeader>
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton asChild tooltip="Dashboard" isActive={true}>
+          <SidebarMenuButton asChild tooltip="Dashboard" isActive={pathname === '/'}>
             <Link href="/">
               <BarChart />
               <span>Dashboard</span>
@@ -28,10 +31,18 @@ export function MainSidebar() {
           </SidebarMenuButton>
         </SidebarMenuItem>
         <SidebarMenuItem>
-          <SidebarMenuButton asChild tooltip="AI Trainer">
+          <SidebarMenuButton asChild tooltip="AI Trainer" isActive={pathname === '/trainer'}>
             <Link href="/trainer">
               <BotMessageSquare />
               <span>AI Trainer</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+         <SidebarMenuItem>
+          <SidebarMenuButton asChild tooltip="Mock Tests" isActive={pathname === '/mock-tests'}>
+            <Link href="/mock-tests">
+              <ClipboardCheck />
+              <span>Mock Tests</span>
             </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>

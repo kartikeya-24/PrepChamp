@@ -35,3 +35,11 @@ export const resources: Resource[] = [
     href: '/trainer',
   },
 ];
+
+export const topics: Record<string, string[]> = {
+    jee: ["Physics - Kinematics", "Physics - Laws of Motion", "Chemistry - Chemical Bonding", "Chemistry - p-Block Elements", "Maths - Complex Numbers", "Maths - Conic Sections"],
+    neet: ["Biology - Human Physiology", "Biology - Plant Kingdom", "Physics - Optics", "Chemistry - Thermodynamics"],
+    upsc: ["History - Modern India", "Polity - Indian Constitution", "Geography - Physical Geography", "Economy - Indian Economy"],
+    cat: ["Quantitative Aptitude - Number System", "Verbal Ability - Reading Comprehension", "Data Interpretation & Logical Reasoning"],
+    gate: ["Computer Science - Data Structures", "Mechanical - Theory of Machines", "Electronics - Analog Circuits", "Civil - Soil Mechanics"],
+}

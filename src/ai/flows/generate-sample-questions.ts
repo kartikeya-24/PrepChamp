@@ -11,6 +11,12 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
+const QuestionSchema = z.object({
+  questionText: z.string().describe('The full text of the question.'),
+  options: z.array(z.string()).length(4).describe('An array of four possible answers.'),
+  correctAnswerIndex: z.number().int().min(0).max(3).describe('The index of the correct answer in the options array.'),
+});
+
 const GenerateTopicQuestionsInputSchema = z.object({
   examName: z.string().describe('The name of the exam for which questions are being generated.'),
   topic: z.string().describe('The specific topic for which questions should be generated.'),
@@ -24,7 +30,7 @@ const GenerateTopicQuestionsInputSchema = z.object({
 export type GenerateTopicQuestionsInput = z.infer<typeof GenerateTopicQuestionsInputSchema>;
 
 const GenerateTopicQuestionsOutputSchema = z.object({
-  questions: z.array(z.string()).describe('An array of generated practice questions.'),
+  questions: z.array(QuestionSchema).describe('An array of generated practice questions.'),
 });
 export type GenerateTopicQuestionsOutput = z.infer<typeof GenerateTopicQuestionsOutputSchema>;
 
@@ -36,12 +42,12 @@ const prompt = ai.definePrompt({
   name: 'generateTopicQuestionsPrompt',
   input: {schema: GenerateTopicQuestionsInputSchema},
   output: {schema: GenerateTopicQuestionsOutputSchema},
-  prompt: `You are an expert in creating practice questions for competitive exams.
+  prompt: `You are an expert in creating multiple-choice practice questions for competitive exams.
 
   Generate {{numQuestions}} practice questions for the {{examName}} exam, specifically on the topic of {{topic}}.
   The questions should be challenging and representative of the actual exam.
-
-  Format each question as a single string in the output array.
+  Each question must have exactly 4 options.
+  Ensure the provided correctAnswerIndex points to the correct option.
   `,
 });
 
