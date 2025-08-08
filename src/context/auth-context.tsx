@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (loading) return;
 
     const isPublicRoute = publicRoutes.includes(pathname);
-    
+
     if (user && isPublicRoute) {
       router.push('/');
     } else if (!user && !isPublicRoute) {
@@ -43,22 +43,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [user, loading, pathname, router]);
 
   if (loading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    );
+  }
+  
+  const isPublicRoute = publicRoutes.includes(pathname);
+  if ((!user && !isPublicRoute) || (user && isPublicRoute)) {
      return (
         <div className="flex h-screen w-full items-center justify-center bg-background">
             <Loader2 className="h-12 w-12 animate-spin text-primary" />
         </div>
      );
   }
-
-  const isPublicRoute = publicRoutes.includes(pathname);
-  if ((!user && !isPublicRoute) || (user && isPublicRoute)) {
-       return (
-        <div className="flex h-screen w-full items-center justify-center bg-background">
-            <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        </div>
-     );
-  }
-
 
   return <AuthContext.Provider value={{ user, loading }}>{children}</AuthContext.Provider>;
 };
