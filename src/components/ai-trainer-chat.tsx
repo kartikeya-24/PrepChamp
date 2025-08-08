@@ -98,16 +98,18 @@ export function AiTrainerChat() {
         reader.onloadend = async () => {
             const base64Audio = reader.result as string;
             const response = await convertSpeechToText({ audioDataUri: base64Audio });
-            if (response.success) {
+            setIsTranscribing(false);
+            if (response.success && response.data.text) {
+                // Set the input and immediately send the message
                 setInput(response.data.text);
+                handleSendMessage(response.data.text);
             } else {
                 toast({
                     variant: "destructive",
                     title: "Transcription Failed",
-                    description: response.error,
+                    description: response.error || "Could not understand audio. Please try again.",
                 });
             }
-            setIsTranscribing(false);
         };
         
         audioChunksRef.current = [];
