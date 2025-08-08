@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -44,6 +44,7 @@ export function MockTest() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [result, setResult] = useState<TestResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | undefined>(undefined);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -59,6 +60,11 @@ export function MockTest() {
   const topicOptions = useMemo(() => {
     return topics[selectedExamId] || [];
   }, [selectedExamId]);
+
+  useEffect(() => {
+    // When the current question changes, reset the selected answer for the UI
+    setSelectedAnswer(userAnswers[currentQuestionIndex]?.toString());
+  }, [currentQuestionIndex, userAnswers]);
 
   async function onStartTest(values: z.infer<typeof formSchema>) {
     setTestState('loading');
@@ -83,9 +89,10 @@ export function MockTest() {
     }
   }
 
-  const handleAnswerChange = (optionIndex: number) => {
+  const handleAnswerChange = (value: string) => {
+    setSelectedAnswer(value);
     const newAnswers = [...userAnswers];
-    newAnswers[currentQuestionIndex] = optionIndex;
+    newAnswers[currentQuestionIndex] = parseInt(value);
     setUserAnswers(newAnswers);
   };
   
@@ -135,7 +142,12 @@ export function MockTest() {
     setCurrentQuestionIndex(0);
     setResult(null);
     setError(null);
-    form.reset();
+    setSelectedAnswer(undefined);
+    form.reset({
+      examId: exams[0].id,
+      topic: topics[exams[0].id][0],
+      numQuestions: 5,
+    });
   };
 
   if (testState === 'loading') {
@@ -164,7 +176,7 @@ export function MockTest() {
               <Form {...form}>
                 <form>
                   <p className="font-semibold mb-4">{currentQuestion.questionText}</p>
-                  <RadioGroup onValueChange={(value) => handleAnswerChange(parseInt(value))} value={userAnswers[currentQuestionIndex]?.toString()}>
+                  <RadioGroup onValueChange={handleAnswerChange} value={selectedAnswer}>
                       {currentQuestion.options.map((option, index) => (
                           <FormItem key={index} className="flex items-center space-x-3 space-y-0">
                               <FormControl>
@@ -268,7 +280,9 @@ export function MockTest() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Topic</FormLabel>
-                   <Select onValueChange={field.onChange} defaultValue={field.value} key={selectedExamId}>
+                   <Select onValueChange={(value) => {
+                       field.onChange(value);
+                   }} defaultValue={field.value} key={selectedExamId}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select a topic" />
