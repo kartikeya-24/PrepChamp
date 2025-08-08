@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { BrainCircuit, Loader2 } from 'lucide-react';
 import { signIn } from '@/lib/actions';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   email: z.string().email('Invalid email address.'),
@@ -21,6 +22,7 @@ const formSchema = z.object({
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

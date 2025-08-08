@@ -38,9 +38,11 @@ export default function RegisterPage() {
     if (result.success) {
       toast({
         title: 'Registration Successful',
-        description: "Your account has been created. Welcome!",
+        description: "Your account has been created. Please log in.",
       });
-      // The AuthProvider will handle the redirect.
+      // The AuthProvider will handle the redirect to the dashboard after login.
+      // For now, we can just let it sit here, or redirect to login.
+      // Since AuthProvider redirects to `/` on logged in state, we don't need to do anything.
     } else {
       toast({
         variant: 'destructive',
