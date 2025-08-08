@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useRef, useEffect, FormEvent } from 'react';
-import { SendHorizonal, Mic, Square } from 'lucide-react';
+import { SendHorizonal, Mic, Square, Bot } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -176,8 +176,8 @@ export function AiTrainerChat() {
                         )}
                     >
                         {message.role === 'ai' && (
-                            <Avatar className="w-8 h-8 border">
-                               <AvatarFallback>A</AvatarFallback>
+                            <Avatar className="w-8 h-8 border flex items-center justify-center bg-primary text-primary-foreground">
+                               <Bot className="w-5 h-5" />
                             </Avatar>
                         )}
                         <div
@@ -200,8 +200,8 @@ export function AiTrainerChat() {
                 ))}
                  {isLoading && (
                     <div className="flex items-start gap-4 justify-start">
-                        <Avatar className="w-8 h-8 border">
-                            <AvatarFallback>A</AvatarFallback>
+                        <Avatar className="w-8 h-8 border flex items-center justify-center bg-primary text-primary-foreground">
+                            <Bot className="w-5 h-5" />
                         </Avatar>
                         <div className="max-w-md rounded-lg p-3 text-sm bg-card shadow-sm">
                            <Skeleton className="w-20 h-4" />
